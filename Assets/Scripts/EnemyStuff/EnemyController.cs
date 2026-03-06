@@ -10,8 +10,6 @@ public class EnemyController : MonoBehaviour
     private Vector3 velocity;
     
     [SerializeField] private Transform playerPos;
-    
-    private GameManager gameManager;
 
     [Header("Ground Check")] 
     [SerializeField] private Vector3 groundCheckOffset;
@@ -26,17 +24,12 @@ public class EnemyController : MonoBehaviour
         return isGrounded;
     }
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (playerPos == null)
             playerPos = GameObject.FindGameObjectWithTag("Player").transform;
-        
-        if(gameManager == null)
-            gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         FindPlayer();
@@ -83,10 +76,5 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawSphere(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance, groundCheckRadius);
         Gizmos.DrawCube(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance/2, 
             new Vector3(1.5f* groundCheckRadius, groundCheckDistance , 1.5f * groundCheckRadius) );
-    }
-
-    private void OnDestroy()
-    {
-        gameManager.IncreaseScore(1);
     }
 }
