@@ -19,4 +19,14 @@ public class Arrow : MonoBehaviour, IWeapons
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
+    }
+
 }

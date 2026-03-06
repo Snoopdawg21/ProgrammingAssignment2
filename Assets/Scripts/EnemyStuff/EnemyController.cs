@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -9,6 +10,8 @@ public class EnemyController : MonoBehaviour
     private Vector3 velocity;
     
     [SerializeField] private Transform playerPos;
+    
+    private GameManager gameManager;
 
     [Header("Ground Check")] 
     [SerializeField] private Vector3 groundCheckOffset;
@@ -28,6 +31,9 @@ public class EnemyController : MonoBehaviour
     {
         if (playerPos == null)
             playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+        
+        if(gameManager == null)
+            gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -77,5 +83,10 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawSphere(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance, groundCheckRadius);
         Gizmos.DrawCube(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance/2, 
             new Vector3(1.5f* groundCheckRadius, groundCheckDistance , 1.5f * groundCheckRadius) );
+    }
+
+    private void OnDestroy()
+    {
+        gameManager.IncreaseScore(1);
     }
 }

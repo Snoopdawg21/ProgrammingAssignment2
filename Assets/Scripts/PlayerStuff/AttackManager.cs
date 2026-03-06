@@ -27,7 +27,12 @@ public class AttackManager : MonoBehaviour
     {
         enemies = GameObject.FindGameObjectWithTag("Enemy");
         
+        if(enemies == null) return;
+        
         newArrow = Instantiate(arrow, transform.position, arrow.transform.rotation);
         newArrow.GetComponent<Arrow>().FindTarget(enemies.transform);
     }
+    
+    
+
 }
