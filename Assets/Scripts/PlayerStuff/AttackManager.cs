@@ -8,24 +8,28 @@ public class AttackManager : MonoBehaviour
     private Transform enemyPos;
     private GameObject[] enemies;
     private float enemyDistance;
+    [SerializeField] private Quaternion rotationOffset;
 
-    private GameObject newArrow;
+    private GameObject newAttackObj;
+    private GameObject selectedObj;
 
     [Header("Attacks")] 
     [SerializeField] private GameObject arrow;
+    [SerializeField] private GameObject fireball;
     
     void Update()
     {
         if (attackTimer > maxFireRate)
         {
-            ShootEnemy();
+            FindClosestEnemy();
+            Shoot(1);
             attackTimer = 0;
         }
 
         attackTimer += Time.deltaTime * fireSpeed;
     }
 
-    private void ShootEnemy()
+    private void FindClosestEnemy()
     {
         enemyDistance = 0;
         
@@ -47,13 +51,16 @@ public class AttackManager : MonoBehaviour
                 enemyPos = enemies[i].transform;
             }
         }
-        
-        Debug.Log($"enemy is {enemyDistance} spaces away");
-        
-        newArrow = Instantiate(arrow, transform.position, arrow.transform.rotation);
-        newArrow.GetComponent<Arrow>().FindTarget(enemyPos);
     }
-    
-    
 
+    private void Shoot(int attackNum)
+    {
+        if (attackNum == 1)
+            selectedObj = arrow;
+        if(attackNum == 2)
+            selectedObj = fireball;
+        
+        newAttackObj = Instantiate(selectedObj, transform.position, arrow.transform.rotation);
+        newAttackObj.GetComponent<IWeapons>().FindTarget(enemyPos);
+    }
 }

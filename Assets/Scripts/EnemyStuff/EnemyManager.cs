@@ -7,12 +7,6 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private float spawnRange;
     [SerializeField] private float spawnTimer;
     [SerializeField] private float maxTimerCount;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

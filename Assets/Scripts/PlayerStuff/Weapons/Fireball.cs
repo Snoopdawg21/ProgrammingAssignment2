@@ -1,23 +1,24 @@
 using UnityEngine;
 
-public class Arrow : MonoBehaviour, IWeapons
+public class Fireball : MonoBehaviour, IWeapons
 {
-    private float speed = 50;
-    private float lifeTime;
-    
+    private float speed = 75;
+    private int damage = 5;
+    private float lifetime;
+
     public void FindTarget(Transform target)
     {
         transform.LookAt(target);
     }
     
-    // Update is called once per frame
     void Update()
     {
-        if(lifeTime >= 5)
+        if(lifetime >= 5)
             Destroy(gameObject);
         
         Fire();
-        lifeTime += Time.deltaTime;
+        
+        lifetime += Time.deltaTime;
     }
 
     public void Fire()
@@ -27,12 +28,10 @@ public class Arrow : MonoBehaviour, IWeapons
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            Destroy(other.gameObject);
-            Destroy(gameObject);
-        }
-    }
-    
+        if (other.gameObject.tag == "Enemy")
+            other.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
 
+        if (other.gameObject.tag != "Player")
+            Destroy(gameObject);
+    }
 }

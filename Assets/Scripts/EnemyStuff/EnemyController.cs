@@ -1,10 +1,12 @@
 using System;
 using UnityEngine;
 using UnityEngine.XR;
+using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private CharacterController controller;
+    [SerializeField] private int health;
     [SerializeField] private float speed;
     [SerializeField] private float gravity;
     private Vector3 velocity;
@@ -28,6 +30,8 @@ public class EnemyController : MonoBehaviour
     {
         if (playerPos == null)
             playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+
+        health = Random.Range(1, 10);
     }
     
     void Update()
@@ -67,6 +71,19 @@ public class EnemyController : MonoBehaviour
             groundCheckDistance,
             groundLayer
         );
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+            KillEnemy();
+    }
+
+    void KillEnemy()
+    {
+        Destroy(gameObject);
     }
     
     void OnDrawGizmos()
