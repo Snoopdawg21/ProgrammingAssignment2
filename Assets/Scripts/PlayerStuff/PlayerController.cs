@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Camera playerCamera;
+    [SerializeField] private int health;
     [SerializeField] private float moveSpeed = 2;
     [SerializeField] private float rotationSpeed = 10;
     [SerializeField] private float gravity = -9.8f;
@@ -28,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 _velocity;
     private bool _isGrounded;
 
+    [Space(10)]
+    [SerializeField] private GameManager gm;
+
     public bool IsGrounded()
     {
         return _isGrounded;
@@ -42,6 +46,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
+        
+        if(gm == null)
+            gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -95,9 +102,6 @@ public class PlayerController : MonoBehaviour
         //Calculate gravity
         _velocity = Vector3.up * _velocity.y + _moveDirection * moveSpeed;
         _velocity.y += gravity * Time.deltaTime;
-
-        
-        
     }
 
     private void CheckGrounded()
@@ -110,6 +114,16 @@ public class PlayerController : MonoBehaviour
             groundCheckDistance,
             groundLayer
         );
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        
+        gm.LoseHealth(health);
+        
+        if(health <= 0)
+            Destroy(gameObject);
     }
     
     void OnDrawGizmos()

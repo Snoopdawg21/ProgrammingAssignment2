@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2885039120450727244}
   - component: {fileID: 8606277839852047937}
   - component: {fileID: 1144137729549303758}
+  - component: {fileID: 7844443761406665451}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -48,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   controller: {fileID: 1144137729549303758}
+  health: 0
+  damage: 1
   speed: 5
   gravity: -20
   playerPos: {fileID: 0}
@@ -82,6 +85,29 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &7844443761406665451
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736229165139944656}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.55
+  m_Height: 2.17268
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.19019553, z: 0}
 --- !u!1 &8479516478416294717
 GameObject:
   m_ObjectHideFlags: 0

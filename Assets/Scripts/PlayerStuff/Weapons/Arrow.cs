@@ -8,7 +8,10 @@ public class Arrow : MonoBehaviour, IWeapons
     
     public void FindTarget(Transform target)
     {
-        transform.LookAt(target);
+        if (target == null)
+            Destroy(gameObject);
+        
+        transform.up = -1 * (target.position - transform.position);
     }
     
     // Update is called once per frame
@@ -23,7 +26,7 @@ public class Arrow : MonoBehaviour, IWeapons
 
     public void Fire()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        transform.Translate(Vector3.down * speed * Time.deltaTime);
     }
 
     void OnTriggerEnter(Collider other)

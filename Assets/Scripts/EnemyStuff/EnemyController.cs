@@ -1,4 +1,5 @@
 using System;
+using System.Transactions;
 using UnityEngine;
 using UnityEngine.XR;
 using Random = UnityEngine.Random;
@@ -7,11 +8,13 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private CharacterController controller;
     [SerializeField] private int health;
+    public int damage;
     [SerializeField] private float speed;
     [SerializeField] private float gravity;
     private Vector3 velocity;
     
     [SerializeField] private Transform playerPos;
+    private GameObject player;
 
     [Header("Ground Check")] 
     [SerializeField] private Vector3 groundCheckOffset;
@@ -28,10 +31,13 @@ public class EnemyController : MonoBehaviour
     
     void Start()
     {
-        if (playerPos == null)
-            playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+        if (player == null)
+            player = GameObject.FindGameObjectWithTag("Player");
 
-        health = Random.Range(1, 10);
+        playerPos = player.transform;
+
+        health = Random.Range(1, 2);
+        damage = 1;
     }
     
     void Update()
@@ -84,6 +90,16 @@ public class EnemyController : MonoBehaviour
     void KillEnemy()
     {
         Destroy(gameObject);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Ow");
+            player.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
+            KillEnemy();
+        }
     }
     
     void OnDrawGizmos()
