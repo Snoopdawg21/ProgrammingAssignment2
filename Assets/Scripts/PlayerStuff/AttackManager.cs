@@ -3,7 +3,7 @@ using UnityEngine;
 public class AttackManager : MonoBehaviour
 {
     [SerializeField] private float attackTimer;
-    public float maxFireRate = 2;
+    [SerializeField] private float maxFireRate = 2;
     public float fireSpeed = 1;
     private Transform enemyPos;
     private GameObject[] enemies;
@@ -55,6 +55,8 @@ public class AttackManager : MonoBehaviour
 
     private void Shoot(int attackNum)
     {
+        if (enemyPos == null) return;
+        
         if (attackNum == 1)
             selectedObj = arrow;
         if(attackNum == 2)

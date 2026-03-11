@@ -19,7 +19,7 @@ public class PlayerInteractor : MonoBehaviour
         interactionInput.performed -= Interact;
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnTriggerStay(Collider col)
     {
         tempInteractable = col?.gameObject.GetComponent<IIInteractable>();
 
@@ -27,10 +27,14 @@ public class PlayerInteractor : MonoBehaviour
         
         interactable = tempInteractable;
         interactable?.OnHoverIn();
+        
+        Debug.Log(col.gameObject.name);
     }
 
     void OnTriggerExit(Collider col)
     {
+        if (col.gameObject.GetComponent<IIInteractable>() == null) return;
+        
         interactable?.OnHoverOut();
         
         if(tempInteractable == null)

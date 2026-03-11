@@ -20,8 +20,6 @@ public class ChestInteractable : MonoBehaviour, IIInteractable
     {
         Debug.Log(gameObject.name);
 
-        am.maxFireRate -= 1f;
-
         collectTween = transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
         {
             transform.DOKill();
