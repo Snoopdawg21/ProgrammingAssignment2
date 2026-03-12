@@ -8,10 +8,13 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private CharacterController controller;
     [SerializeField] private int health;
+    private int maxHealth;
     public int damage;
     [SerializeField] private float speed;
     [SerializeField] private float gravity;
     private Vector3 velocity;
+
+    [SerializeField] private GameManager gm;
     
     [SerializeField] private Transform playerPos;
     private GameObject player;
@@ -33,10 +36,14 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player");
+        
+        if(gm == null)
+            gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
 
         playerPos = player.transform;
 
-        health = Random.Range(1, 2);
+        maxHealth = Random.Range(1, 2);
+        health = maxHealth;
         damage = 1;
     }
     
@@ -82,6 +89,8 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        
+        gm.IncreaseScore(maxHealth - health);
 
         if (health <= 0)
             KillEnemy();

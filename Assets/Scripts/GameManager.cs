@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        score = 0;
+        
         if (am == null)
             am = GameObject.FindGameObjectWithTag("Player").GetComponent<AttackManager>();
     }
@@ -24,11 +26,16 @@ public class GameManager : MonoBehaviour
 
     public void LoseHealth(int newHealth)
     {
-        
+        healthBar.fillAmount = newHealth;
     }
 
     public void IncreaseFireRate()
     {
-        am.fireSpeed++;
+        if (score > 5)
+        {
+            am.fireSpeed++;
+
+            score -= 5;
+        }
     }
 }

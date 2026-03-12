@@ -4,6 +4,7 @@ using UnityEngine;
 public class ShopInteractable : MonoBehaviour, IIInteractable
 {
     [SerializeField] private GameObject shopMenu;
+    [SerializeField] private MouseHider mh;
     private bool shopIsOpen = false;
 
     private void Start()
@@ -17,6 +18,7 @@ public class ShopInteractable : MonoBehaviour, IIInteractable
         shopIsOpen = !shopIsOpen;
         
         shopMenu.SetActive(shopIsOpen);
+        mh.ShowMouse(shopIsOpen);
         
         Toast.instance.HideToast();
     }

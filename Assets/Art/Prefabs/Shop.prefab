@@ -54,6 +54,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c47286429da476b45bae34184a9f3e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopInteractable
+  shopMenu: {fileID: 0}
+  mh: {fileID: 0}
 --- !u!65 &6974839724017436239
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -512,6 +514,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4cafc3ddba37d8543b3c87bd6ae325ab, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7325099858071590373}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4cafc3ddba37d8543b3c87bd6ae325ab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1706991237565322149}
   m_SourcePrefab: {fileID: 100100000, guid: 4cafc3ddba37d8543b3c87bd6ae325ab, type: 3}
 --- !u!1 &4644754591988676242 stripped
 GameObject:
@@ -541,6 +546,28 @@ CapsuleCollider:
   m_Height: 2.5082612
   m_Direction: 1
   m_Center: {x: 0, y: 1.0824888, z: 0}
+--- !u!95 &1706991237565322149
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4644754591988676242}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 549fd4d4eaf14544eba14536f2a519f8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &5421959146182880296 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4cafc3ddba37d8543b3c87bd6ae325ab, type: 3}
