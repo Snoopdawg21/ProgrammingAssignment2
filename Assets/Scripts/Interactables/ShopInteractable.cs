@@ -7,10 +7,18 @@ public class ShopInteractable : MonoBehaviour, IIInteractable
     [SerializeField] private MouseHider mh;
     private bool shopIsOpen = false;
 
+    [SerializeField] private Animator anim;
+
     private void Start()
     {
         if(shopMenu == null)
             shopMenu = GameObject.Find("ShopMenu");
+
+        if (mh == null)
+            mh = GameObject.FindGameObjectWithTag("Player").GetComponent<MouseHider>();
+        
+        if(anim == null)
+            anim = GetComponent<Animator>();
     }
 
     public void OnInteract() 
@@ -27,8 +35,6 @@ public class ShopInteractable : MonoBehaviour, IIInteractable
     {
         if(!shopIsOpen)
             Toast.instance.ShowToast("Press \"E\" to interact");
-        
-        Debug.Log("In");
     }
     
     public void OnHoverOut() 
@@ -38,6 +44,6 @@ public class ShopInteractable : MonoBehaviour, IIInteractable
         
         Toast.instance.HideToast();
         
-        Debug.Log("Out");
+        anim.SetTrigger("Left");
     }
 }

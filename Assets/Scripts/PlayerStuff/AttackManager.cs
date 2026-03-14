@@ -5,6 +5,8 @@ public class AttackManager : MonoBehaviour
     [SerializeField] private float attackTimer;
     [SerializeField] private float maxFireRate = 2;
     public float fireSpeed = 1;
+    public int basicAttackType = 1;
+    
     private Transform enemyPos;
     private GameObject[] enemies;
     private float enemyDistance;
@@ -22,7 +24,7 @@ public class AttackManager : MonoBehaviour
         if (attackTimer > maxFireRate)
         {
             FindClosestEnemy();
-            Shoot(1);
+            Shoot(basicAttackType);
             attackTimer = 0;
         }
 

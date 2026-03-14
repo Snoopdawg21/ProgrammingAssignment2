@@ -27,8 +27,6 @@ public class PlayerInteractor : MonoBehaviour
         
         interactable = tempInteractable;
         interactable?.OnHoverIn();
-        
-        Debug.Log(col.gameObject.name);
     }
 
     void OnTriggerExit(Collider col)
@@ -44,6 +42,5 @@ public class PlayerInteractor : MonoBehaviour
     private void Interact(InputAction.CallbackContext context)
     {
         interactable?.OnInteract();
-        Debug.Log("Interacted it");
     }
 }

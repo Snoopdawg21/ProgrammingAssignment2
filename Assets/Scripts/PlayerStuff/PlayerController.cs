@@ -41,8 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         return _velocity;
     }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
@@ -50,8 +49,7 @@ public class PlayerController : MonoBehaviour
         if(gm == null)
             gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         CalculateMovement();

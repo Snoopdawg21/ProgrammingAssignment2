@@ -19,7 +19,7 @@ public class EnemyManager : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        spawnOffset = new Vector3(Random.Range(-spawnRange, spawnRange), 5, Random.Range(-spawnRange, spawnRange));
+        spawnOffset = new Vector3(Random.Range(-spawnRange, spawnRange), spawnOffset.y, Random.Range(-spawnRange, spawnRange));
         Instantiate(enemyRef, transform.position + spawnOffset, enemyRef.transform.rotation);
         
         spawnTimer = 0;

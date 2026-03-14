@@ -1,8 +1,9 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Fireball : MonoBehaviour, IWeapons
 {
-    private float speed = 75;
+    private float speed = 100;
     private int damage = 5;
     private float lifetime;
 

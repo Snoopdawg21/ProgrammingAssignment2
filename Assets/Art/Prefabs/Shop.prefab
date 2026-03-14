@@ -56,6 +56,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopInteractable
   shopMenu: {fileID: 0}
   mh: {fileID: 0}
+  anim: {fileID: 1706991237565322149}
 --- !u!65 &6974839724017436239
 BoxCollider:
   m_ObjectHideFlags: 0

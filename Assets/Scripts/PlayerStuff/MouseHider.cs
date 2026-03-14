@@ -11,6 +11,6 @@ public class MouseHider : MonoBehaviour
     public void ShowMouse(bool value)
     {
         Cursor.visible = value;
-        Cursor.lockState = value ? CursorLockMode.Confined : CursorLockMode.Locked;
+        Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
     }
 }
