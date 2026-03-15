@@ -8,12 +8,15 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private int score;
     private bool boughtFireball;
+    private bool boughtSpinSword;
     
     [Space(20)]
     [Header("UI Stuff")]
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private TMP_Text fireballCost;
+    [SerializeField] private TMP_Text spinSwordCost;
+    [SerializeField] private GameObject deathScreen;
 
     void Start()
     {
@@ -29,6 +32,11 @@ public class GameManager : MonoBehaviour
     {
         score += amount;
         UpdateScore();
+    }
+
+    public void DeadPlayer()
+    {
+        deathScreen.SetActive(true);
     }
 
     void UpdateScore()
@@ -59,11 +67,11 @@ public class GameManager : MonoBehaviour
     {
         if (!boughtFireball)
         {
-            if (score >= 5)
+            if (score >= 50)
             {
                 am.basicAttackType = 2;
 
-                score -= 5;
+                score -= 50;
                 boughtFireball = true;
                 fireballCost.text = "Unavailable";
                 fireballCost.color = Color.gray2;
@@ -74,5 +82,44 @@ public class GameManager : MonoBehaviour
         }
         else
             Debug.Log("You already have the fireball.");
+    }
+
+    public void BuySpinSpeed()
+    {
+        if (boughtSpinSword)
+        {
+            if (score >= 2)
+            {
+                am.IncreaseSpinSpeed(10);
+                score -= 2;
+                UpdateScore();
+            }
+            else
+                Debug.Log("You can't afford that.");
+        }
+        else
+            Debug.Log("You need to buy the spinning sword.");
+    }
+
+    public void BuySpinningSword()
+    {
+        if (!boughtSpinSword)
+        {
+            if (score >= 10)
+            {
+                am.BuySpinningSword();
+                
+                score -= 10;
+                boughtSpinSword = true;
+                UpdateScore();
+                
+                spinSwordCost.text = "Unavailable";
+                spinSwordCost.color = Color.gray2;
+            }
+            else
+                Debug.Log("You can't afford that.");
+        }
+        else
+            Debug.Log("You already have the spinning sword.");
     }
 }

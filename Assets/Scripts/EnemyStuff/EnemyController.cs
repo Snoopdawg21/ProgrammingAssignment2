@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
     private Vector3 velocity;
 
     [SerializeField] private GameManager gm;
+    [SerializeField] private EnemyManager em;
     
     [SerializeField] private Transform playerPos;
     private GameObject player;
@@ -36,13 +37,10 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player");
-        
-        if(gm == null)
-            gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
 
         playerPos = player.transform;
 
-        maxHealth = Random.Range(1, 2);
+        maxHealth = Random.Range(2, 4);
         health = maxHealth;
         damage = 1;
     }
@@ -90,6 +88,9 @@ public class EnemyController : MonoBehaviour
     {
         health -= damage;
         
+        if(gm == null)
+            gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+        
         gm.IncreaseScore(maxHealth - health);
 
         if (health <= 0)
@@ -98,6 +99,11 @@ public class EnemyController : MonoBehaviour
 
     void KillEnemy()
     {
+        if (em == null)
+            em = GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyManager>();
+
+        em.enemyCount--;
+        
         Destroy(gameObject);
     }
 

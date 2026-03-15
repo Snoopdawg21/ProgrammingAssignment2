@@ -1,12 +1,9 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AttackManager : MonoBehaviour
 {
-    [SerializeField] private float attackTimer;
-    [SerializeField] private float maxFireRate = 2;
-    public float fireSpeed = 1;
-    public int basicAttackType = 1;
-    
     private Transform enemyPos;
     private GameObject[] enemies;
     private float enemyDistance;
@@ -18,7 +15,19 @@ public class AttackManager : MonoBehaviour
     [Header("Attacks")] 
     [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject fireball;
+    [SerializeField] private GameObject spinningSword;
+    [SerializeField] private Transform swordInstance;
     
+    [Space(10)]
+    [Header("Basic Attack Stats")]
+    [SerializeField] private float attackTimer;
+    [SerializeField] private float maxFireRate = 2;
+    public float fireSpeed = 1;
+    public int basicAttackType = 1;
+
+    [Space(10)] [Header("Spinning Sword Stats")] 
+    [SerializeField] private float spinSpeed;
+
     void Update()
     {
         if (attackTimer > maxFireRate)
@@ -29,6 +38,12 @@ public class AttackManager : MonoBehaviour
         }
 
         attackTimer += Time.deltaTime * fireSpeed;
+    }
+
+    public void IncreaseSpinSpeed(float amount)
+    {
+        spinSpeed += amount;
+        spinningSword.GameObject().GetComponent<SpinningSword>().GetSpeed(spinSpeed);
     }
 
     private void FindClosestEnemy()
@@ -66,5 +81,13 @@ public class AttackManager : MonoBehaviour
         
         newAttackObj = Instantiate(selectedObj, transform.position, arrow.transform.rotation);
         newAttackObj.GetComponent<IWeapons>().FindTarget(enemyPos);
+    }
+
+    public void BuySpinningSword()
+    {
+        Debug.Log("cum");
+        spinningSword.SetActive(true);
+        spinningSword.GameObject().GetComponent<IWeapons>().FindTarget(swordInstance);
+        IncreaseSpinSpeed(10);
     }
 }

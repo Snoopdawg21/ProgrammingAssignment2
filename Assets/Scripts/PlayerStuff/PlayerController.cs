@@ -119,9 +119,13 @@ public class PlayerController : MonoBehaviour
         health -= damage;
         
         gm.LoseHealth(health);
-        
-        if(health <= 0)
+
+        if (health <= 0)
+        {
+            gm.DeadPlayer();
+            
             Destroy(gameObject);
+        }
     }
     
     void OnDrawGizmos()
