@@ -21,7 +21,6 @@ public class EnemyManager : MonoBehaviour
             SpawnEnemy();
 
             enemyCount++;
-            Debug.Log($"Spawned Enemy Numed {enemyCount}");
         }
         
         spawnTimer += Time.deltaTime;

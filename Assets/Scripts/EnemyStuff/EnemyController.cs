@@ -20,6 +20,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Transform playerPos;
     private GameObject player;
 
+    private float lifetime;
+
     [Header("Ground Check")] 
     [SerializeField] private Vector3 groundCheckOffset;
     [SerializeField] private float groundCheckDistance;
@@ -47,9 +49,19 @@ public class EnemyController : MonoBehaviour
     
     void Update()
     {
+        if (lifetime > 10)
+        {
+            KillEnemy();
+        }
         FindPlayer();
         HandleMovement();
         controller.Move(velocity * Time.deltaTime);
+        lifetime += Time.deltaTime;
+
+        if (health != maxHealth)
+        {
+            lifetime = -5;
+        }
     }
     
     private void FixedUpdate()

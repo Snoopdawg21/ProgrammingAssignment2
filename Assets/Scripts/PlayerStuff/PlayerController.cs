@@ -107,7 +107,6 @@ public class PlayerController : MonoBehaviour
     {
         if(_isGrounded)
         {
-            Debug.Log("JUMP");
             _velocity.y = jumpVelocity;
             OnJumpEvent?.Invoke();
         }
