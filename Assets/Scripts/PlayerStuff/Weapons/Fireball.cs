@@ -14,7 +14,7 @@ public class Fireball : MonoBehaviour, IWeapons
     
     void Update()
     {
-        if(lifetime >= 5)
+        if(lifetime >= 3)
             Destroy(gameObject);
         
         Fire();

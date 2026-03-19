@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class SpinningSword : MonoBehaviour, IWeapons
 {
-    private Transform swordPos;
-    private float speed;
-    private int damage = 5;
+    [SerializeField] private Transform swordPos;
+    private float speed = 10;
 
     public void GetSpeed(float newSpeed)
     {
@@ -24,14 +23,5 @@ public class SpinningSword : MonoBehaviour, IWeapons
     public void Fire()
     {
         swordPos.RotateAround(transform.position, Vector3.up, speed * Time.deltaTime);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            other.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
-            Debug.LogWarning("Hit Enemy");
-        }
     }
 }

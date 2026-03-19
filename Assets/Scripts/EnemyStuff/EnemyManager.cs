@@ -13,7 +13,7 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (spawnTimer > maxTimerCount && enemyCount < 300)
+        if (spawnTimer > maxTimerCount && enemyCount < 150)
         {
             if (maxTimerCount > 0.1f)
                 maxTimerCount -= maxTimerCount / 64;

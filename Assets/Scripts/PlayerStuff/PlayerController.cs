@@ -10,6 +10,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10;
     [SerializeField] private float gravity = -9.8f;
     [SerializeField] private float jumpVelocity = 10f;
+    
+    [Space(5)]
+    [Header("Aim Movement")]
+    [SerializeField] private float moveSpeedAim = 2;
+    [SerializeField] private float rotationSpeedAim = 10;
+    [SerializeField] private Transform aimTrack;
+    [SerializeField] private float maxAimHeight;
+    [SerializeField] private float minAimHeight;
 
     [Space(10)]
     [Header("Ground Check")]
@@ -19,8 +27,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     public event Action OnJumpEvent;
+    public event Action<PlayerState> OnStateUpdated;
     
     private Vector2 _moveInput;
+    private Vector2 lookInput;
     private Vector3 _camForward;
     private Vector3 _camRight;
     private Vector3 _moveDirection;
@@ -28,6 +38,9 @@ public class PlayerController : MonoBehaviour
     private Quaternion _targetRotation;
     private Vector3 _velocity;
     private bool _isGrounded;
+    private PlayerState currentState;
+    private Vector3 defaultAimTrackerPos;
+    private Vector3 tempAimTrackerPos;
 
     [Space(10)]
     [SerializeField] private GameManager gm;
@@ -48,11 +61,26 @@ public class PlayerController : MonoBehaviour
         
         if(gm == null)
             gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+
+        currentState = PlayerState.Explore;
+        OnStateUpdated?.Invoke(currentState);
+
+        defaultAimTrackerPos = aimTrack.localPosition;
     }
     
     void Update()
     {
-        CalculateMovement();
+        if (currentState == PlayerState.Explore)
+        {
+            CalcExplorationMovement();
+            aimTrack.localPosition = defaultAimTrackerPos;
+        }
+        else if (currentState == PlayerState.Aim)
+        {
+            CalcAimMovement();
+            UpdateAimTracker();
+        }
+        
         _characterController.Move(_velocity * Time.deltaTime);
     }
 
@@ -70,6 +98,11 @@ public class PlayerController : MonoBehaviour
         _moveInput = value.Get<Vector2>();
     }
 
+    public void OnLook(InputValue value)
+    {
+        lookInput = value.Get<Vector2>();
+    }
+
     public void OnJump()
     {
         if(_isGrounded)
@@ -80,7 +113,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void CalculateMovement()
+    public void OnAim(InputValue value)
+    {
+        currentState = value.isPressed ? PlayerState.Aim : PlayerState.Explore;
+        
+        OnStateUpdated?.Invoke(currentState);
+
+        if (currentState == PlayerState.Aim)
+        {
+            _camForward = playerCamera.transform.forward;
+            _camForward.y = 0;
+            _camForward.Normalize();
+            transform.rotation = Quaternion.LookRotation(_camForward);
+        }
+    }
+    
+    private void CalcExplorationMovement()
     {
         _camForward = playerCamera.transform.forward;
         _camRight = playerCamera.transform.right;
@@ -98,8 +146,30 @@ public class PlayerController : MonoBehaviour
         }
         
         //Calculate gravity
-        _velocity = Vector3.up * _velocity.y + _moveDirection * moveSpeed;
+        _velocity = _velocity.y * Vector3.up + moveSpeed * _moveDirection;
         _velocity.y += gravity * Time.deltaTime;
+    }
+
+    private void CalcAimMovement()
+    {
+        //Rotate around Y-Axis, based on horizontal input
+        transform.Rotate(Vector3.up, rotationSpeedAim * lookInput.x * Time.deltaTime);
+
+        _moveDirection = _moveInput.x * transform.right + _moveInput.y * transform.forward;
+        
+        _velocity = _velocity.y * Vector3.up + moveSpeedAim * _moveDirection;
+        _velocity.y += gravity * Time.deltaTime;
+    }
+
+    private void UpdateAimTracker()
+    {
+        tempAimTrackerPos = aimTrack.localPosition;
+        
+        tempAimTrackerPos.y += lookInput.y * rotationSpeedAim * Time.deltaTime;
+        
+        tempAimTrackerPos.y = Mathf.Clamp(tempAimTrackerPos.y, minAimHeight, maxAimHeight);
+        
+        aimTrack.localPosition = tempAimTrackerPos;
     }
 
     private void CheckGrounded()

@@ -17,7 +17,7 @@ public class Arrow : MonoBehaviour, IWeapons
     // Update is called once per frame
     void Update()
     {
-        if(lifeTime >= 5)
+        if(lifeTime >= 3)
             Destroy(gameObject);
         
         Fire();

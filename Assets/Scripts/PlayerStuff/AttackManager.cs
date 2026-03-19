@@ -85,7 +85,6 @@ public class AttackManager : MonoBehaviour
 
     public void BuySpinningSword()
     {
-        Debug.Log("cum");
         spinningSword.SetActive(true);
         spinningSword.GameObject().GetComponent<IWeapons>().FindTarget(swordInstance);
         IncreaseSpinSpeed(10);
