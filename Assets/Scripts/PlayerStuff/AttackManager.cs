@@ -28,6 +28,11 @@ public class AttackManager : MonoBehaviour
     [Space(10)] [Header("Spinning Sword Stats")] 
     [SerializeField] private float spinSpeed;
 
+    private float a;
+    private float b;
+    private float c;
+    private float tempDistance;
+
     void Update()
     {
         if (attackTimer > maxFireRate)
@@ -57,11 +62,11 @@ public class AttackManager : MonoBehaviour
         for (int i = 0; i < enemies.Length; i++)
         {
             //pythagoris
-            float a = transform.position.x - enemies[i].transform.position.x;
-            float b = transform.position.z - enemies[i].transform.position.z;
-            float c = (a * a) + (b * b);
+            a = transform.position.x - enemies[i].transform.position.x;
+            b = transform.position.z - enemies[i].transform.position.z;
+            c = (a * a) + (b * b);
             
-            float tempDistance = Mathf.Sqrt(c);
+            tempDistance = Mathf.Sqrt(c);
             if (tempDistance < enemyDistance || enemyDistance == 0)
             {
                 enemyDistance = tempDistance;

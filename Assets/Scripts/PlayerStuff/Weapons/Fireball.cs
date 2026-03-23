@@ -9,6 +9,9 @@ public class Fireball : MonoBehaviour, IWeapons
 
     public void FindTarget(Transform target)
     {
+        if (target == null)
+            Destroy(gameObject);
+        
         transform.LookAt(target);
     }
     

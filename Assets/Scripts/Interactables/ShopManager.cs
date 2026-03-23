@@ -13,6 +13,7 @@ public class ShopManager : MonoBehaviour
     
     [SerializeField] private TMP_Text fireballCost;
     [SerializeField] private TMP_Text spinSwordCost;
+    [SerializeField] private GameObject spinSwordUpgradeButton;
 
     void Start()
     {
@@ -97,6 +98,7 @@ public class ShopManager : MonoBehaviour
                 
                 spinSwordCost.text = "Unavailable";
                 spinSwordCost.color = Color.gray2;
+                spinSwordUpgradeButton.SetActive(true);
             }
             else
                 Debug.Log("You can't afford that.");

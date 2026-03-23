@@ -1,26 +1,23 @@
-using System;
-using System.Transactions;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.XR;
-using Random = UnityEngine.Random;
 
-public class EnemyController : MonoBehaviour
+public class BossEnemyController : MonoBehaviour
 {
     [SerializeField] private CharacterController controller;
     [SerializeField] private int health;
-    private int maxHealth;
-    public int damage;
+    [SerializeField] private int damage;
     [SerializeField] private float speed;
     [SerializeField] private float gravity;
     private Vector3 velocity;
 
-    [SerializeField] private GameManager gm;
-    [SerializeField] private EnemyManager em;
-    
     private GameObject player;
 
-    private float lifetime;
-
+    private BossState currentState;
+    
+    [SerializeField] private Transform fistPos;
+    private Vector3 fistStartPos;
+    [SerializeField] private float fistSpeed;
+    
     [Header("Ground Check")] 
     [SerializeField] private Vector3 groundCheckOffset;
     [SerializeField] private float groundCheckDistance;
@@ -28,33 +25,37 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     
     private bool isGrounded;
-    
+
+    private float a;
+    private float b;
+    private float c;
+    private float distance;
+
     void Start()
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player");
-
-        maxHealth = Random.Range(2, 4);
-        health = maxHealth;
-        damage = 1;
+        
+        controller = GetComponent<CharacterController>();
+        
+        currentState = BossState.Idle;
     }
     
     void Update()
     {
-        if (lifetime > 10)
-        {
-            KillEnemy();
-        }
-        FindPlayer();
         HandleMovement();
-        controller.Move(velocity * Time.deltaTime);
-        
-        if (health == maxHealth)
+        if (currentState == BossState.Hunting)
         {
-            lifetime += Time.deltaTime;
+            FindPlayer();
+            controller.Move(velocity * Time.deltaTime);
+        }
+
+        if (currentState == BossState.Attacking)
+        {
+            SmashFists();
         }
     }
-    
+
     private void FixedUpdate()
     {
         CheckGrounded();
@@ -66,7 +67,20 @@ public class EnemyController : MonoBehaviour
 
     private void FindPlayer()
     {
+        a = transform.position.x - player.transform.position.x;
+        b = transform.position.z - player.transform.position.z;
+        c = (a * a) + (b * b);
+            
+        distance = Mathf.Sqrt(c);
+        
         transform.LookAt(player.transform);
+        transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+
+        if (distance < 2)
+        {
+            currentState = BossState.Attacking;
+            fistStartPos = fistPos.position;
+        }
     }
 
     private void HandleMovement()
@@ -75,6 +89,19 @@ public class EnemyController : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
     }
 
+    private void SmashFists()
+    {
+        if (fistPos.position.y < -2)
+        {
+            currentState = BossState.Idle;
+            fistPos.position = fistStartPos;
+            return;
+        }
+        Debug.Log(fistPos.position.y);
+        
+        fistPos.Translate(Vector3.down * fistSpeed * Time.deltaTime);
+    }
+    
     private void CheckGrounded()
     {
         isGrounded = Physics.SphereCast(
@@ -87,36 +114,11 @@ public class EnemyController : MonoBehaviour
         );
     }
 
-    public void TakeDamage(int damage)
-    {
-        health -= damage;
-        
-        if(gm == null)
-            gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
-        
-        gm.IncreaseScore(maxHealth - health);
-
-        if (health <= 0)
-            KillEnemy();
-    }
-
-    void KillEnemy()
-    {
-        if (em == null)
-            em = GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyManager>();
-
-        em.enemyCount--;
-        
-        Destroy(gameObject);
-    }
-
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Ow");
-            player.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
-            KillEnemy();
+            currentState = BossState.Hunting;
         }
     }
     
