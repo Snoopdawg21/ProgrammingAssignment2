@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2885039120450727244}
-  - component: {fileID: 8606277839852047937}
   - component: {fileID: 1144137729549303758}
   - component: {fileID: 7844443761406665451}
+  - component: {fileID: 8606277839852047937}
+  - component: {fileID: 7882565516034162809}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -36,30 +37,6 @@ Transform:
   - {fileID: 5846766059186247885}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8606277839852047937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5736229165139944656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97ad3b647b84d7a48842053af47faa10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  controller: {fileID: 1144137729549303758}
-  health: 0
-  damage: 1
-  speed: 5
-  gravity: -20
-  playerPos: {fileID: 0}
-  groundCheckOffset: {x: 0, y: -0.45, z: 0}
-  groundCheckDistance: 0.23
-  groundCheckRadius: 0.31
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!143 &1144137729549303758
 CharacterController:
   m_ObjectHideFlags: 0
@@ -108,6 +85,45 @@ CapsuleCollider:
   m_Height: 2.17268
   m_Direction: 1
   m_Center: {x: 0, y: 0.19019553, z: 0}
+--- !u!114 &8606277839852047937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736229165139944656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ad3b647b84d7a48842053af47faa10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyController
+  controller: {fileID: 1144137729549303758}
+  maxHealth: 0
+  damage: 1
+  speed: 5
+  gravity: -20
+  gm: {fileID: 0}
+  em: {fileID: 0}
+  groundCheckOffset: {x: 0, y: -0.45, z: 0}
+  groundCheckDistance: 0.23
+  groundCheckRadius: 0.31
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &7882565516034162809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736229165139944656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3700e220c6cc2cf4dbf8634b78805467, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyAttacker
+  damage: 1
+  player: {fileID: 0}
 --- !u!1 &8479516478416294717
 GameObject:
   m_ObjectHideFlags: 0

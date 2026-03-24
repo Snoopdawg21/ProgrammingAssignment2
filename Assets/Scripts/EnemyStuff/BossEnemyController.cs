@@ -15,8 +15,11 @@ public class BossEnemyController : MonoBehaviour
     private BossState currentState;
     
     [SerializeField] private Transform fistPos;
-    private Vector3 fistStartPos;
     [SerializeField] private float fistSpeed;
+    private Vector3 fistStartPos;
+    private float attackTimer;
+
+    private bool seenPlayer;
     
     [Header("Ground Check")] 
     [SerializeField] private Vector3 groundCheckOffset;
@@ -39,10 +42,17 @@ public class BossEnemyController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         
         currentState = BossState.Idle;
+        
+        fistStartPos = fistPos.localPosition;
     }
     
     void Update()
     {
+        if (seenPlayer && currentState != BossState.Attacking)
+        {
+            currentState = BossState.Hunting;
+        }
+        
         HandleMovement();
         if (currentState == BossState.Hunting)
         {
@@ -52,7 +62,17 @@ public class BossEnemyController : MonoBehaviour
 
         if (currentState == BossState.Attacking)
         {
+            if (attackTimer >= 2)
+            {
+                currentState = seenPlayer ? BossState.Hunting : BossState.Idle;
+                fistPos.localPosition = fistStartPos;
+                attackTimer = 0;
+                return;
+            }
+            
             SmashFists();
+
+            attackTimer += Time.deltaTime;
         }
     }
 
@@ -79,7 +99,6 @@ public class BossEnemyController : MonoBehaviour
         if (distance < 2)
         {
             currentState = BossState.Attacking;
-            fistStartPos = fistPos.position;
         }
     }
 
@@ -91,12 +110,6 @@ public class BossEnemyController : MonoBehaviour
 
     private void SmashFists()
     {
-        if (fistPos.position.y < -2)
-        {
-            currentState = BossState.Idle;
-            fistPos.position = fistStartPos;
-            return;
-        }
         Debug.Log(fistPos.position.y);
         
         fistPos.Translate(Vector3.down * fistSpeed * Time.deltaTime);
@@ -118,7 +131,7 @@ public class BossEnemyController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            currentState = BossState.Hunting;
+            seenPlayer = true;
         }
     }
     

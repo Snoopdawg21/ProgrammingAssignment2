@@ -7,9 +7,8 @@ using Random = UnityEngine.Random;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private CharacterController controller;
-    [SerializeField] private int health;
-    private int maxHealth;
-    public int damage;
+    private int health;
+    [SerializeField] private int maxHealth;
     [SerializeField] private float speed;
     [SerializeField] private float gravity;
     private Vector3 velocity;
@@ -33,10 +32,8 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player");
-
-        maxHealth = Random.Range(2, 4);
+        
         health = maxHealth;
-        damage = 1;
     }
     
     void Update()
@@ -67,6 +64,7 @@ public class EnemyController : MonoBehaviour
     private void FindPlayer()
     {
         transform.LookAt(player.transform);
+        transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
     }
 
     private void HandleMovement()
@@ -100,7 +98,7 @@ public class EnemyController : MonoBehaviour
             KillEnemy();
     }
 
-    void KillEnemy()
+    public void KillEnemy()
     {
         if (em == null)
             em = GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyManager>();
@@ -108,16 +106,6 @@ public class EnemyController : MonoBehaviour
         em.enemyCount--;
         
         Destroy(gameObject);
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Ow");
-            player.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
-            KillEnemy();
-        }
     }
     
     void OnDrawGizmos()

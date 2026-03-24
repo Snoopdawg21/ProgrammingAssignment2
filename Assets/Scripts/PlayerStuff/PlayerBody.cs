@@ -20,7 +20,7 @@ public class PlayerBody : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Ow.");
-            TakeDamage(other.gameObject.GetComponent<EnemyController>().damage);
+            TakeDamage(other.gameObject.GetComponent<BasicEnemyAttacker>().damage);
             Destroy(other.gameObject);
         }
     }
