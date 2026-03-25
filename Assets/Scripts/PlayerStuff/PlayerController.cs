@@ -187,14 +187,18 @@ public class PlayerController : MonoBehaviour
     {
         health -= damage;
         
-        gm.LoseHealth(health);
+        gm.DisplayHealth(health);
 
         if (health <= 0)
         {
             gm.DeadPlayer();
-            
-            Destroy(gameObject);
         }
+    }
+
+    public void Heal(int ammount)
+    {
+        health += ammount;
+        gm.DisplayHealth(health);
     }
     
     void OnDrawGizmos()

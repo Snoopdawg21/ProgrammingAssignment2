@@ -5,7 +5,7 @@ public class ShopInteractable : MonoBehaviour, IIInteractable
 {
     [SerializeField] private GameObject shopMenu;
     [SerializeField] private MouseHider mh;
-    private bool shopIsOpen = false;
+    private bool shopIsOpen;
 
     [SerializeField] private Animator anim;
 

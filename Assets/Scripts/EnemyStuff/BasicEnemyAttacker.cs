@@ -15,7 +15,6 @@ public class BasicEnemyAttacker : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Ow");
             player.GetComponent<PlayerController>().TakeDamage(damage);
             player.GetComponent<DamageIndicator>().TakeDamage();
             gameObject.GetComponent<EnemyController>().KillEnemy();

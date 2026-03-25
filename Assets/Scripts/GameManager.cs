@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     public void DeadPlayer()
     {
         deathScreen.SetActive(true);
+        
+        Time.timeScale = 0;
     }
 
     public void UpdateScore()
@@ -49,7 +51,7 @@ public class GameManager : MonoBehaviour
         scoreText.text = $"Score: {score}";
     }
 
-    public void LoseHealth(int newHealth)
+    public void DisplayHealth(int newHealth)
     {
         healthText.text = $"Health: {newHealth}";
     }

@@ -21,6 +21,23 @@ public class BossEnemyController : MonoBehaviour
     
     private float distance;
 
+    private bool isHunting;
+
+    public int Damage()
+    {
+        return damage;
+    }
+
+    public GameObject Player()
+    {
+        return player;
+    }
+
+    public bool IsHunting()
+    {
+        return isHunting;
+    }
+
     void Start()
     {
         if (player == null)
@@ -45,22 +62,28 @@ public class BossEnemyController : MonoBehaviour
         {
             currentState = BossState.Hunting;
         }
+
+        if (currentState == BossState.Idle)
+        {
+            isHunting = false;
+            ec.enabled = false;
+        }
         
         if (currentState == BossState.Hunting)
         {
+            isHunting = true;
             ec.enabled = true;
             FindPlayerDistance();
         }
 
         if (currentState == BossState.Attacking)
         {
+            isHunting = false;
             ec.enabled = false;
             
             if (attackTimer >= 2)
             {
-                currentState = seenPlayer ? BossState.Hunting : BossState.Idle;
-                fistPos.localPosition = fistStartPos;
-                attackTimer = 0;
+                ResetFists();
                 return;
             }
             
@@ -86,6 +109,13 @@ public class BossEnemyController : MonoBehaviour
         Debug.Log(fistPos.position.y);
         
         fistPos.Translate(Vector3.down * fistSpeed * Time.deltaTime);
+    }
+
+    public void ResetFists()
+    {
+        currentState = seenPlayer ? BossState.Hunting : BossState.Idle;
+        fistPos.localPosition = fistStartPos;
+        attackTimer = 0;
     }
 
     void OnTriggerEnter(Collider other)
