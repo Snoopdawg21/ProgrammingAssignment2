@@ -15,7 +15,7 @@ public class EnemyManager : MonoBehaviour
     {
         if (spawnTimer > maxTimerCount && enemyCount < 150)
         {
-            if (maxTimerCount > 1)
+            if (maxTimerCount > 0.5f)
                 maxTimerCount -= maxTimerCount / 64;
             
             SpawnEnemy();

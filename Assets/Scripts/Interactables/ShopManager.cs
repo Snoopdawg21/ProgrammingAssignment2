@@ -46,11 +46,11 @@ public class ShopManager : MonoBehaviour
         
         if (!boughtFireball)
         {
-            if (money >= 50)
+            if (money >= 25)
             {
                 am.basicAttackType = 2;
 
-                gm.score -= 50;
+                gm.score -= 25;
                 boughtFireball = true;
                 fireballCost.text = "Unavailable";
                 fireballCost.color = Color.gray2;

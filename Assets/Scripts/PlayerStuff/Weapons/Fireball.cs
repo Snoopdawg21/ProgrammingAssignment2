@@ -4,7 +4,7 @@ using UnityEngine;
 public class Fireball : MonoBehaviour, IWeapons
 {
     private float speed = 100;
-    private int damage = 5;
+    private int damage = 3;
     private float lifetime;
 
     public void FindTarget(Transform target)

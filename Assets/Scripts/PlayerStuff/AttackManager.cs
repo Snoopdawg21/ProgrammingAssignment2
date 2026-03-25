@@ -59,8 +59,21 @@ public class AttackManager : MonoBehaviour
         
         if(enemies == null) return;
 
+        if (enemies.Length == 1)
+        {
+            if(enemies[0].gameObject.GetComponent<EnemyController>().enabled)
+                enemyPos = enemies[0].transform;
+            
+            return;
+        }
+
         for (int i = 0; i < enemies.Length; i++)
         {
+            if (enemies[i].gameObject.GetComponent<EnemyController>().enabled == false)
+            {
+                i++;
+            }
+            
             //pythagoris
             a = transform.position.x - enemies[i].transform.position.x;
             b = transform.position.z - enemies[i].transform.position.z;

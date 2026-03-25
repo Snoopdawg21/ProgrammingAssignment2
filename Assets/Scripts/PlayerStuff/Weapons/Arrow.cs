@@ -33,7 +33,8 @@ public class Arrow : MonoBehaviour, IWeapons
     {
         if (other.gameObject.tag == "Enemy")
         {
-            other.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
+            other?.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
+            
             Destroy(gameObject);
         }
     }

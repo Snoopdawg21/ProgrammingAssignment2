@@ -19,6 +19,8 @@ public class EnemyController : MonoBehaviour
     private GameObject player;
 
     private float lifetime;
+    [SerializeField] private float maxLifeTime;
+    [SerializeField] private bool despawnable;
 
     [Header("Ground Check")] 
     [SerializeField] private Vector3 groundCheckOffset;
@@ -38,7 +40,7 @@ public class EnemyController : MonoBehaviour
     
     void Update()
     {
-        if (lifetime > 10)
+        if (lifetime > maxLifeTime)
         {
             KillEnemy();
         }
@@ -46,7 +48,7 @@ public class EnemyController : MonoBehaviour
         HandleMovement();
         controller.Move(velocity * Time.deltaTime);
         
-        if (health == maxHealth)
+        if (health == maxHealth && despawnable)
         {
             lifetime += Time.deltaTime;
         }
