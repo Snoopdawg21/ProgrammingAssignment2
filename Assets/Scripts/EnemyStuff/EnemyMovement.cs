@@ -5,8 +5,8 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-    [SerializeField] private Transform[] patrolPoints;
     [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private CharacterController controller;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private float chaseDistance;
     [SerializeField] private float giveUpDistance;
@@ -15,11 +15,33 @@ public class EnemyMovement : MonoBehaviour
     
     private EnemyStates currentState;
     private bool waiting;
+
+    private Vector3 velocity;
+    
+    [Header("Ground Check")] 
+    [SerializeField] private float groundCheckDistance;
+    private bool isGrounded;
+
+    public EnemyStates CurrentState()
+    {
+        return currentState;
+    }
     
     void Start()
     {
-        PickRandomPoint();
+        if(playerTransform == null)
+            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        
+        if(agent == null)
+            Destroy(gameObject);
+        
         agent.stoppingDistance = 0.2f;
+        
+        CheckGrounded();
+        if (!isGrounded)
+            Destroy(gameObject);
+        
+        transform.forward = (playerTransform.position - transform.position).normalized;
     }
     
     void FixedUpdate()
@@ -35,34 +57,16 @@ public class EnemyMovement : MonoBehaviour
                 currentState = EnemyStates.Chase;
             }
         } 
-        else if (currentState == EnemyStates.Patrol)
-        {
-            animator.SetBool("isWalking", true);
-            CheckTargetDistance();
-            if (InRange() && InFOV())
-            {
-                currentState = EnemyStates.Chase;
-            }
-        }
         else if (currentState == EnemyStates.Chase)
         {
             animator.SetBool("isWalking", true);
             agent.SetDestination(playerTransform.position);
             if (outOfRange())
             {
-                currentState = EnemyStates.Idle;
+                CheckTargetDistance();
                 animator.SetBool("isWalking", false);
             }
         }
-    }
-
-    private void PickRandomPoint()
-    {
-        if (patrolPoints.Length <= 0) return;
-        
-        currentTarget = patrolPoints[Random.Range(0, patrolPoints.Length)];
-        
-        agent.SetDestination(currentTarget.position);
     }
 
     private void CheckTargetDistance()
@@ -76,12 +80,9 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator GoToTarget(float waitTime)
     {
-        Debug.Log("hi");
         waiting = true;
         yield return new WaitForSeconds(waitTime);
-        currentState = EnemyStates.Patrol;
         animator.SetBool("isIdle", false);
-        PickRandomPoint();
         waiting = false;
     }
 
@@ -100,5 +101,10 @@ public class EnemyMovement : MonoBehaviour
     {
         directionToPlayer = (playerTransform.position - transform.position).normalized;
         return Vector3.Angle(transform.forward, directionToPlayer) <= chaseCheckAngle;
+    }
+    
+    private void CheckGrounded()
+    {
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
     }
 }

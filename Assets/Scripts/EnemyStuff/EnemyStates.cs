@@ -3,7 +3,7 @@ using UnityEngine;
 public enum EnemyStates
 {
     Idle,
-    Patrol,
+    Searching,
     Chase,
     Attack
 }

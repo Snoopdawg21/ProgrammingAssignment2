@@ -31,7 +31,7 @@ public class EnemyManager : MonoBehaviour
         if (playerPos == null) return;
         
         spawnOffset = new Vector3(Random.Range(-spawnRange, spawnRange), spawnOffset.y, Random.Range(-spawnRange, spawnRange));
-        Instantiate(enemyRef, playerPos.position + spawnOffset, enemyRef.transform.rotation);
+        Instantiate(enemyRef, spawnOffset, enemyRef.transform.rotation);
         
         spawnTimer = 0;
     }
