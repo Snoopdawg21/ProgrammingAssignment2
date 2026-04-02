@@ -1,4 +1,3 @@
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -21,7 +20,7 @@ public class AttackManager : MonoBehaviour
     [Space(10)]
     [Header("Basic Attack Stats")]
     [SerializeField] private float attackTimer;
-    [SerializeField] private float maxFireRate = 2;
+    [SerializeField] private float maxFireRate = 3;
     public float fireSpeed = 1;
     public int basicAttackType = 1;
 
@@ -32,6 +31,11 @@ public class AttackManager : MonoBehaviour
     private float b;
     private float c;
     private float tempDistance;
+
+    void Start()
+    {
+        attackTimer = 0;
+    }
 
     void Update()
     {
@@ -69,6 +73,8 @@ public class AttackManager : MonoBehaviour
 
         for (int i = 0; i < enemies.Length; i++)
         {
+            if (enemies[i] == null) return;
+            
             if (enemies[i].gameObject.GetComponent<EnemyController>().enabled == false)
             {
                 i++;

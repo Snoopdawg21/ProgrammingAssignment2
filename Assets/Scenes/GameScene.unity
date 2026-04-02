@@ -593,7 +593,7 @@ MonoBehaviour:
   spinningSword: {fileID: 719979172}
   swordInstance: {fileID: 1594298688}
   attackTimer: 0
-  maxFireRate: 2
+  maxFireRate: 3
   fireSpeed: 1
   basicAttackType: 1
   spinSpeed: 0
@@ -1100,8 +1100,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23084393, y: 0.000000028997396, z: -0.0000000068796875, w: 0.9729908}
-  m_LocalPosition: {x: 0, y: 33.71059, z: -3.998736}
+  m_LocalRotation: {x: 0.035023265, y: 0, z: 0, w: 0.99938655}
+  m_LocalPosition: {x: 0, y: 32.9, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
