@@ -14,6 +14,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private TMP_Text fireballCost;
     [SerializeField] private TMP_Text spinSwordCost;
     [SerializeField] private GameObject spinSwordUpgradeButton;
+    [SerializeField] private GameObject spinSwordLengthButton;
 
     void Start()
     {
@@ -99,11 +100,28 @@ public class ShopManager : MonoBehaviour
                 spinSwordCost.text = "Unavailable";
                 spinSwordCost.color = Color.gray2;
                 spinSwordUpgradeButton.SetActive(true);
+                spinSwordLengthButton.SetActive(true);
             }
             else
                 Debug.Log("You can't afford that.");
         }
         else
             Debug.Log("You already have the spinning sword.");
+    }
+
+    public void BuySwordLength()
+    {
+        money = gm.score;
+
+        if (money >= 5)
+        {
+            am.spinningSword.transform.localScale = new Vector3(am.spinningSword.transform.localScale.x, am.spinningSword.transform.localScale.y, am.spinningSword.transform.localScale.z + 0.25f);
+            gm.score -= 5;
+            gm.UpdateScore();
+        }
+        else
+        {
+            Debug.Log("You can't afford that.");
+        }
     }
 }

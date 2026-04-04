@@ -14,7 +14,7 @@ public class AttackManager : MonoBehaviour
     [Header("Attacks")] 
     [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject fireball;
-    [SerializeField] private GameObject spinningSword;
+    public GameObject spinningSword;
     [SerializeField] private Transform swordInstance;
     
     [Space(10)]
