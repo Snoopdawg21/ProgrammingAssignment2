@@ -6,7 +6,7 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private CharacterController controller;
+    [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private float chaseDistance;
     [SerializeField] private float giveUpDistance;
@@ -18,9 +18,8 @@ public class EnemyMovement : MonoBehaviour
 
     private Vector3 velocity;
     
-    [Header("Ground Check")] 
-    [SerializeField] private float groundCheckDistance;
-    private bool isGrounded;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float groundOffset;
 
     public EnemyStates CurrentState()
     {
@@ -31,32 +30,24 @@ public class EnemyMovement : MonoBehaviour
     {
         if(playerTransform == null)
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        
-        if(agent == null)
-            Destroy(gameObject);
-        
-        agent.stoppingDistance = 0.2f;
-        
-        CheckGrounded();
-        if (!isGrounded)
-            Destroy(gameObject);
-        
-        transform.forward = (playerTransform.position - transform.position).normalized;
     }
     
     void FixedUpdate()
     {
-        if (currentState == EnemyStates.Idle)
+        //The Idle state is only active when the enemy is falling, otherwise it's doing something
+        if (currentState == EnemyStates.Grounded)
         {
-            animator.SetBool("isIdle", true);
-            if(!waiting)
-                StartCoroutine(GoToTarget(1));
-
+            if (!waiting)
+            {
+                StartCoroutine(LookForGround(1));
+            }
+            
             if (InRange() && InFOV())
             {
                 currentState = EnemyStates.Chase;
+                animator.SetBool("isIdle", false);
             }
-        } 
+        }
         else if (currentState == EnemyStates.Chase)
         {
             animator.SetBool("isWalking", true);
@@ -64,7 +55,6 @@ public class EnemyMovement : MonoBehaviour
             if (outOfRange())
             {
                 CheckTargetDistance();
-                animator.SetBool("isWalking", false);
             }
         }
     }
@@ -73,14 +63,15 @@ public class EnemyMovement : MonoBehaviour
     {
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            currentState = EnemyStates.Idle;
+            currentState = EnemyStates.Grounded;
             animator.SetBool("isWalking", false);
         }
     }
 
-    private IEnumerator GoToTarget(float waitTime)
+    private IEnumerator LookForGround(float waitTime)
     {
         waiting = true;
+        animator.SetBool("isIdle", true);
         yield return new WaitForSeconds(waitTime);
         animator.SetBool("isIdle", false);
         waiting = false;
@@ -102,9 +93,21 @@ public class EnemyMovement : MonoBehaviour
         directionToPlayer = (playerTransform.position - transform.position).normalized;
         return Vector3.Angle(transform.forward, directionToPlayer) <= chaseCheckAngle;
     }
-    
-    private void CheckGrounded()
+
+    private void OnCollisionEnter(Collision other)
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance);
+        if (other.gameObject.layer == 6)
+        {
+            animator.SetBool("isIdle", true);
+            currentState = EnemyStates.Grounded;
+            
+            gameObject.AddComponent(typeof(NavMeshAgent));
+            agent = gameObject.GetComponent<NavMeshAgent>();
+            agent.stoppingDistance = 0.2f;
+            agent.baseOffset = groundOffset;
+            rb.isKinematic = false;
+            
+            transform.forward = (playerTransform.position - transform.position).normalized;
+        }
     }
 }

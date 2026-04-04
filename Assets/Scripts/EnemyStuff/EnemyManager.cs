@@ -26,10 +26,8 @@ public class EnemyManager : MonoBehaviour
         spawnTimer += Time.deltaTime;
     }
 
-    private void SpawnEnemy()
+    public void SpawnEnemy()
     {
-        if (playerPos == null) return;
-        
         spawnOffset = new Vector3(Random.Range(-spawnRange, spawnRange), spawnOffset.y, Random.Range(-spawnRange, spawnRange));
         Instantiate(enemyRef, spawnOffset, enemyRef.transform.rotation);
         

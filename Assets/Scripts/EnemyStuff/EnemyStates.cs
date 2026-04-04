@@ -1,7 +1,7 @@
 public enum EnemyStates
 {
     Idle,
-    Searching,
+    Grounded,
     Chase,
     Attack
 }

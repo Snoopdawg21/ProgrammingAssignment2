@@ -20,11 +20,14 @@ public class EnemyController : MonoBehaviour
         
         if(gm == null)
             gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+        
+        if(eManager == null)
+            eManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<EnemyManager>();
     }
     
     void Update()
     {
-        if (eMove.CurrentState() == EnemyStates.Idle)
+        if (eMove.CurrentState() == EnemyStates.Grounded || eMove.CurrentState() == EnemyStates.Idle)
         {
             despawnable = true;
         }
@@ -36,6 +39,7 @@ public class EnemyController : MonoBehaviour
         if (lifetime > maxLifeTime)
         {
             Debug.Log("Timed Out");
+            eManager.SpawnEnemy();
             KillEnemy();
         }
         
