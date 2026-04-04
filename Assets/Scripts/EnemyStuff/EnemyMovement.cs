@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
+    [SerializeField] private BasicEnemyAttacker bea;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Rigidbody rb;
@@ -11,12 +12,13 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float chaseDistance;
     [SerializeField] private float giveUpDistance;
     [SerializeField] private float chaseCheckAngle;
+    [SerializeField] private float attackDistance;
     private Transform currentTarget;
     
     private EnemyStates currentState;
     private bool waiting;
-
-    private Vector3 velocity;
+    private bool attacking;
+    private bool checkCollisions;
     
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundOffset;
@@ -30,6 +32,8 @@ public class EnemyMovement : MonoBehaviour
     {
         if(playerTransform == null)
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
+        checkCollisions = true;
     }
     
     void FixedUpdate()
@@ -39,7 +43,8 @@ public class EnemyMovement : MonoBehaviour
         {
             if (!waiting)
             {
-                StartCoroutine(LookForGround(1));
+                animator.SetBool("isIdle", true);
+                StartCoroutine(WaitTime(1));
             }
             
             if (InRange() && InFOV())
@@ -52,10 +57,17 @@ public class EnemyMovement : MonoBehaviour
         {
             animator.SetBool("isWalking", true);
             agent.SetDestination(playerTransform.position);
-            if (outOfRange())
+            if (OutOfRange() || InRange() && InFOV())
             {
                 CheckTargetDistance();
             }
+        }
+        else if (currentState == EnemyStates.Attack)
+        {
+            bea.AttackPlayer();
+            Debug.Log("I'm Attacking");
+            checkCollisions = true;
+            currentState = EnemyStates.Idle;
         }
     }
 
@@ -66,14 +78,20 @@ public class EnemyMovement : MonoBehaviour
             currentState = EnemyStates.Grounded;
             animator.SetBool("isWalking", false);
         }
+
+        if (Vector3.Distance(transform.position, playerTransform.position) <= attackDistance)
+        {
+            currentState = EnemyStates.Attack;
+            animator.SetBool("isWalking", false);
+            rb.isKinematic = false;
+            agent.enabled = false;
+        }
     }
 
-    private IEnumerator LookForGround(float waitTime)
+    private IEnumerator WaitTime(float waitTime)
     {
         waiting = true;
-        animator.SetBool("isIdle", true);
         yield return new WaitForSeconds(waitTime);
-        animator.SetBool("isIdle", false);
         waiting = false;
     }
 
@@ -82,7 +100,7 @@ public class EnemyMovement : MonoBehaviour
         return Vector3.Distance(transform.position, playerTransform.position) <= chaseDistance;
     }
 
-    private bool outOfRange()
+    private bool OutOfRange()
     {
         return Vector3.Distance(transform.position, playerTransform.position) >= giveUpDistance;
     }
@@ -96,16 +114,26 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer == 6)
+        if (other.gameObject.layer == 6 && checkCollisions)
         {
             animator.SetBool("isIdle", true);
             currentState = EnemyStates.Grounded;
+
+            if (agent == null)
+            {
+                gameObject.AddComponent(typeof(NavMeshAgent));
+                agent = gameObject.GetComponent<NavMeshAgent>();
+                agent.stoppingDistance = 0.2f;
+                agent.baseOffset = groundOffset;
+            }
+            else
+            {
+                agent.enabled = true;
+            }
             
-            gameObject.AddComponent(typeof(NavMeshAgent));
-            agent = gameObject.GetComponent<NavMeshAgent>();
-            agent.stoppingDistance = 0.2f;
-            agent.baseOffset = groundOffset;
-            rb.isKinematic = false;
+            
+            rb.isKinematic = true;
+            checkCollisions = false;
             
             transform.forward = (playerTransform.position - transform.position).normalized;
         }

@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
     
     void Update()
     {
-        if (eMove.CurrentState() == EnemyStates.Grounded || eMove.CurrentState() == EnemyStates.Idle)
+        if (eMove.CurrentState() == EnemyStates.Grounded)
         {
             despawnable = true;
         }

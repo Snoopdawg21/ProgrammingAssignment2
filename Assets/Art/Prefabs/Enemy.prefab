@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2885039120450727244}
   - component: {fileID: 7844443761406665451}
+  - component: {fileID: 1671221439501453979}
   - component: {fileID: 3429647565494340491}
   - component: {fileID: 8606277839852047937}
   - component: {fileID: 7882565516034162809}
@@ -61,6 +62,27 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.19019553, z: 0}
+--- !u!65 &1671221439501453979
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736229165139944656}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6435656, y: 0.5, z: 0.63249207}
+  m_Center: {x: 0, y: -0.55, z: 0}
 --- !u!54 &3429647565494340491
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -121,6 +143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemyAttacker
   damage: 1
   player: {fileID: 0}
+  rb: {fileID: 3429647565494340491}
+  jumpForce: 7
 --- !u!114 &3637519997238229302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,6 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623fcace06cb51448ad7a98dd8e155a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  bea: {fileID: 7882565516034162809}
   animator: {fileID: 3133404658206196589}
   agent: {fileID: 0}
   rb: {fileID: 3429647565494340491}
@@ -140,6 +165,7 @@ MonoBehaviour:
   chaseDistance: 100
   giveUpDistance: 200
   chaseCheckAngle: 90
+  attackDistance: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
