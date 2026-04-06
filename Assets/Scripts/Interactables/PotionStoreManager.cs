@@ -24,4 +24,16 @@ public class PotionStoreManager : MonoBehaviour
             gm.UpdateScore();
         }
     }
+
+    public void IncreaseSpeedBasic()
+    {
+        money = gm.score;
+
+        if (money > 5)
+        {
+            gm.score -= 5;
+            playerController.IncreaseSpeed(0.5f);
+            gm.UpdateScore();
+        }
+    }
 }

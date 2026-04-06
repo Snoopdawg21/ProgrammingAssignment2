@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10;
     [SerializeField] private float gravity = -9.8f;
     [SerializeField] private float jumpVelocity = 10f;
+    [SerializeField] private float speedModifier;
     
     [Space(5)]
     [Header("Aim Movement")]
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
     private PlayerState currentState;
     private Vector3 defaultAimTrackerPos;
     private Vector3 tempAimTrackerPos;
+
 
     [Space(10)]
     [SerializeField] private GameManager gm;
@@ -145,7 +147,7 @@ public class PlayerController : MonoBehaviour
         }
         
         //Calculate gravity
-        _velocity = _velocity.y * Vector3.up + moveSpeed * _moveDirection;
+        _velocity = _velocity.y * Vector3.up + (moveSpeed * speedModifier) * _moveDirection;
         _velocity.y += gravity * Time.deltaTime;
     }
 
@@ -156,7 +158,7 @@ public class PlayerController : MonoBehaviour
 
         _moveDirection = _moveInput.x * transform.right + _moveInput.y * transform.forward;
         
-        _velocity = _velocity.y * Vector3.up + moveSpeedAim * _moveDirection;
+        _velocity = _velocity.y * Vector3.up + (moveSpeedAim * speedModifier) * _moveDirection;
         _velocity.y += gravity * Time.deltaTime;
     }
 
@@ -199,6 +201,11 @@ public class PlayerController : MonoBehaviour
     {
         health += ammount;
         gm.DisplayHealth(health);
+    }
+
+    public void IncreaseSpeed(float ammount)
+    {
+        speedModifier += ammount;
     }
     
     void OnDrawGizmos()
