@@ -126,9 +126,8 @@ MonoBehaviour:
   gravity: -20
   gm: {fileID: 0}
   eManager: {fileID: 0}
-  eMove: {fileID: 3637519997238229302}
   maxLifeTime: 10
-  despawnable: 1
+  despawnable: 0
 --- !u!114 &7882565516034162809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   bea: {fileID: 7882565516034162809}
+  ec: {fileID: 8606277839852047937}
   animator: {fileID: 3133404658206196589}
   agent: {fileID: 0}
   rb: {fileID: 3429647565494340491}

@@ -8,8 +8,7 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private GameManager gm;
     [SerializeField] private EnemyManager eManager;
-    [SerializeField] private EnemyMovement eMove;
-
+    
     private float lifetime;
     [SerializeField] private float maxLifeTime;
     [SerializeField] private bool despawnable;
@@ -27,15 +26,6 @@ public class EnemyController : MonoBehaviour
     
     void Update()
     {
-        if (eMove.CurrentState() == EnemyStates.Grounded)
-        {
-            despawnable = true;
-        }
-        else
-        {
-            despawnable = false;
-        }
-        
         if (lifetime > maxLifeTime)
         {
             Debug.Log("Timed Out");
@@ -52,6 +42,7 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        Debug.Log(health);
         
         gm.IncreaseScore(maxHealth - health);
 
@@ -67,5 +58,10 @@ public class EnemyController : MonoBehaviour
         eManager.enemyCount--;
         
         Destroy(gameObject);
+    }
+
+    public void DespawnToggle()
+    {
+        despawnable = !despawnable;
     }
 }

@@ -1,6 +1,6 @@
-using System;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BossEnemyController : MonoBehaviour
 {
@@ -9,8 +9,8 @@ public class BossEnemyController : MonoBehaviour
     private GameObject player;
 
     private BossState currentState;
-    [SerializeField] private EnemyController ec;
     [SerializeField] private GameManager gm;
+    [SerializeField] private NavMeshAgent agent;
     
     [SerializeField] private Transform fistPos;
     [SerializeField] private float fistSpeed;
@@ -42,18 +42,16 @@ public class BossEnemyController : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player");
-
-        if (ec == null)
-            gameObject.GetComponent<EnemyController>();
         
         if(gm == null)
             gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
-
-        ec.enabled = false;
         
         currentState = BossState.Idle;
         
         fistStartPos = fistPos.localPosition;
+
+        agent.stoppingDistance = 5;
+        agent.enabled = false;
     }
     
     void Update()
@@ -61,44 +59,35 @@ public class BossEnemyController : MonoBehaviour
         if (seenPlayer && currentState == BossState.Idle)
         {
             currentState = BossState.Hunting;
+            agent.enabled = true;
         }
 
         if (currentState == BossState.Idle)
         {
             isHunting = false;
-            ec.enabled = false;
+            agent.enabled = false;
         }
         
         if (currentState == BossState.Hunting)
         {
             isHunting = true;
-            ec.enabled = true;
             FindPlayerDistance();
+            agent.SetDestination(player.transform.position);
         }
 
         if (currentState == BossState.Attacking)
         {
             isHunting = false;
-            ec.enabled = false;
-            
-            if (attackTimer >= 2)
-            {
-                ResetFists();
-                return;
-            }
+
+            StartCoroutine(AttackTime(1.5f));
             
             SmashFists();
-
-            attackTimer += Time.deltaTime;
         }
     }
 
     private void FindPlayerDistance()
     {
-        distance = Vector3.Distance(player.transform.position, transform.position);
-        Debug.Log(distance);
-
-        if (distance < 5)
+        if (agent.remainingDistance < agent.stoppingDistance)
         {
             currentState = BossState.Attacking;
         }
@@ -106,16 +95,19 @@ public class BossEnemyController : MonoBehaviour
 
     private void SmashFists()
     {
-        Debug.Log(fistPos.position.y);
-        
         fistPos.Translate(Vector3.down * fistSpeed * Time.deltaTime);
+    }
+
+    private IEnumerator AttackTime(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        ResetFists();
     }
 
     public void ResetFists()
     {
         currentState = seenPlayer ? BossState.Hunting : BossState.Idle;
         fistPos.localPosition = fistStartPos;
-        attackTimer = 0;
     }
 
     void OnTriggerEnter(Collider other)

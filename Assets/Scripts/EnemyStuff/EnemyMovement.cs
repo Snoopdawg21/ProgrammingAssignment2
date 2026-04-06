@@ -2,9 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour, IEnemyMovement
 {
     [SerializeField] private BasicEnemyAttacker bea;
+    [SerializeField] private EnemyController ec;
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Rigidbody rb;
@@ -51,6 +52,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 currentState = EnemyStates.Chase;
                 animator.SetBool("isIdle", false);
+                ec.DespawnToggle();
             }
         }
         else if (currentState == EnemyStates.Chase)
@@ -71,12 +73,13 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private void CheckTargetDistance()
+    public void CheckTargetDistance()
     {
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
             currentState = EnemyStates.Grounded;
             animator.SetBool("isWalking", false);
+            ec.DespawnToggle();
         }
 
         if (Vector3.Distance(transform.position, playerTransform.position) <= attackDistance)
@@ -131,7 +134,7 @@ public class EnemyMovement : MonoBehaviour
                 agent.enabled = true;
             }
             
-            
+            ec.DespawnToggle();
             rb.isKinematic = true;
             checkCollisions = false;
             

@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AttackManager : MonoBehaviour
 {
@@ -75,8 +76,10 @@ public class AttackManager : MonoBehaviour
         {
             if (enemies[i] == null) return;
             
-            if (enemies[i].gameObject.GetComponent<EnemyController>().enabled == false)
+            if (!enemies[i].gameObject.GetComponent<NavMeshAgent>())
             {
+                if (i + 1 == enemies.Length) return;
+
                 i++;
             }
             
