@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour, IEnemyMovement
+public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private BasicEnemyAttacker bea;
     [SerializeField] private EnemyController ec;

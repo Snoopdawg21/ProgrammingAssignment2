@@ -17,7 +17,7 @@ public class PotionStoreManager : MonoBehaviour
     {
         money = gm.score;
 
-        if (money > 5)
+        if (money >= 5)
         {
             gm.score -= 5;
             playerController.Heal(1);
@@ -29,7 +29,7 @@ public class PotionStoreManager : MonoBehaviour
     {
         money = gm.score;
 
-        if (money > 5)
+        if (money >= 5)
         {
             gm.score -= 5;
             playerController.IncreaseSpeed(0.5f);

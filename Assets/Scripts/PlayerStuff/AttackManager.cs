@@ -1,4 +1,5 @@
-using Unity.VisualScripting;
+using System.Collections;
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,16 +18,22 @@ public class AttackManager : MonoBehaviour
     [SerializeField] private GameObject fireball;
     public GameObject spinningSword;
     [SerializeField] private Transform swordInstance;
+    [SerializeField] private GameObject smokeball;
+
+    private IWeapons weaponInterface;
     
     [Space(10)]
     [Header("Basic Attack Stats")]
     [SerializeField] private float attackTimer;
-    [SerializeField] private float maxFireRate = 3;
+    [SerializeField] private bool canFire;
     public float fireSpeed = 1;
     public int basicAttackType = 1;
 
     [Space(10)] [Header("Spinning Sword Stats")] 
     [SerializeField] private float spinSpeed;
+    
+    [Space(10)] [Header("Smokeball Stats")]
+    [SerializeField] private Transform spawnPoint;
 
     private float a;
     private float b;
@@ -35,25 +42,31 @@ public class AttackManager : MonoBehaviour
 
     void Start()
     {
-        attackTimer = 0;
+        StartCoroutine(BasicAttackTimer(attackTimer));
     }
 
     void Update()
     {
-        if (attackTimer > maxFireRate)
+        if (canFire)
         {
+            StartCoroutine(BasicAttackTimer(attackTimer));
             FindClosestEnemy();
-            Shoot(basicAttackType);
-            attackTimer = 0;
+            //Shoot(basicAttackType);
+            ThrowBomb();
         }
+    }
 
-        attackTimer += Time.deltaTime * fireSpeed;
+    private IEnumerator BasicAttackTimer(float timer)
+    {
+        canFire = false;
+        yield return new WaitForSeconds(timer);
+        canFire = true;
     }
 
     public void IncreaseSpinSpeed(float amount)
     {
         spinSpeed += amount;
-        spinningSword.GameObject().GetComponent<SpinningSword>().GetSpeed(spinSpeed);
+        spinningSword.GetComponent<SpinningSword>().GetSpeed(spinSpeed);
     }
 
     private void FindClosestEnemy()
@@ -66,7 +79,7 @@ public class AttackManager : MonoBehaviour
 
         if (enemies.Length == 1)
         {
-            if(enemies[0].gameObject.GetComponent<EnemyController>().enabled)
+            if(enemies[0].GetComponent<EnemyController>().enabled)
                 enemyPos = enemies[0].transform;
             
             return;
@@ -76,7 +89,7 @@ public class AttackManager : MonoBehaviour
         {
             if (enemies[i] == null) return;
             
-            if (!enemies[i].gameObject.GetComponent<NavMeshAgent>())
+            if (!enemies[i].GetComponent<NavMeshAgent>())
             {
                 if (i + 1 == enemies.Length) return;
 
@@ -110,10 +123,19 @@ public class AttackManager : MonoBehaviour
         newAttackObj.GetComponent<IWeapons>().FindTarget(enemyPos);
     }
 
+    private void ThrowBomb()
+    {
+        newAttackObj = Instantiate(smokeball, spawnPoint.position, smokeball.transform.rotation);
+        weaponInterface = newAttackObj.GetComponent<IWeapons>();
+        weaponInterface.FindTarget(enemyPos);
+        weaponInterface.Fire();
+
+    }
+
     public void BuySpinningSword()
     {
         spinningSword.SetActive(true);
-        spinningSword.GameObject().GetComponent<IWeapons>().FindTarget(swordInstance);
+        spinningSword.GetComponent<IWeapons>().FindTarget(swordInstance);
         IncreaseSpinSpeed(10);
     }
 }

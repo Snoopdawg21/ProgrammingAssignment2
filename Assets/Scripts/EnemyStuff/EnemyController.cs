@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -8,7 +9,8 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private GameManager gm;
     [SerializeField] private EnemyManager eManager;
-    
+
+    private bool hitable;
     private float lifetime;
     [SerializeField] private float maxLifeTime;
     [SerializeField] private bool despawnable;
@@ -16,6 +18,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         health = maxHealth;
+        hitable = true;
         
         if(gm == null)
             gm = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
@@ -39,15 +42,26 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private IEnumerator DamageCooldown(float timer)
+    {
+        hitable = false;
+        yield return new WaitForSeconds(timer);
+        hitable = true;
+    }
+
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        Debug.Log(health);
+        if (hitable)
+        {
+            StartCoroutine("DamageCooldown", damage);
+            health -= damage;
+            Debug.Log(health);
         
-        gm.IncreaseScore(maxHealth - health);
+            gm.IncreaseScore(maxHealth - health);
 
-        if (health <= 0)
-            KillEnemy();
+            if (health <= 0)
+                KillEnemy();
+        }
     }
 
     public void KillEnemy()
