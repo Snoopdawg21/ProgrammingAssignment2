@@ -14,6 +14,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float giveUpDistance;
     [SerializeField] private float chaseCheckAngle;
     [SerializeField] private float attackDistance;
+    [SerializeField] private float pauseTimer;
     private Transform currentTarget;
     
     private EnemyStates currentState;
@@ -71,6 +72,10 @@ public class EnemyMovement : MonoBehaviour
             checkCollisions = true;
             currentState = EnemyStates.Idle;
         }
+        else if (currentState == EnemyStates.Paused)
+        {
+            StartCoroutine(PauseTime(pauseTimer));
+        }
     }
 
     public void CheckTargetDistance()
@@ -96,6 +101,13 @@ public class EnemyMovement : MonoBehaviour
         waiting = true;
         yield return new WaitForSeconds(waitTime);
         waiting = false;
+    }
+
+    private IEnumerator PauseTime(float timer)
+    {
+        Debug.Log("Paused");
+        yield return new WaitForSeconds(timer);
+        checkCollisions = true;
     }
 
     private bool InRange()
@@ -140,5 +152,10 @@ public class EnemyMovement : MonoBehaviour
             
             transform.forward = (playerTransform.position - transform.position).normalized;
         }
+    }
+
+    public void SwitchState(EnemyStates state)
+    {
+        currentState = state;
     }
 }

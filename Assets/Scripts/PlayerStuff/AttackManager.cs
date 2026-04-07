@@ -34,6 +34,7 @@ public class AttackManager : MonoBehaviour
     
     [Space(10)] [Header("Smokeball Stats")]
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private Transform aimPoint;
 
     private float a;
     private float b;
@@ -127,7 +128,7 @@ public class AttackManager : MonoBehaviour
     {
         newAttackObj = Instantiate(smokeball, spawnPoint.position, smokeball.transform.rotation);
         weaponInterface = newAttackObj.GetComponent<IWeapons>();
-        weaponInterface.FindTarget(enemyPos);
+        weaponInterface.FindTarget(aimPoint);
         weaponInterface.Fire();
 
     }

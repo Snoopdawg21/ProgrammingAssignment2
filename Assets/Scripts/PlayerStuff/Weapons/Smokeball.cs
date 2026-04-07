@@ -6,6 +6,7 @@ public class Smokeball : MonoBehaviour, IWeapons
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Vector3 throwHeight;
     [SerializeField] private float throwForce;
+    [SerializeField] private GameObject smokeCloud;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,5 +31,14 @@ public class Smokeball : MonoBehaviour, IWeapons
             Destroy(gameObject);
         
         transform.LookAt(target);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == 6)
+        {
+            Instantiate(smokeCloud, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
     }
 }
