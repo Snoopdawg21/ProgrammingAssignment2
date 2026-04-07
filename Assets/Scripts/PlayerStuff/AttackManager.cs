@@ -1,5 +1,5 @@
 using System.Collections;
-
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,28 +13,31 @@ public class AttackManager : MonoBehaviour
     private GameObject newAttackObj;
     private GameObject selectedObj;
 
-    [Header("Attacks")] 
-    [SerializeField] private GameObject arrow;
+    [Header("Attacks")] [SerializeField] private GameObject arrow;
     [SerializeField] private GameObject fireball;
     public GameObject spinningSword;
     [SerializeField] private Transform swordInstance;
     [SerializeField] private GameObject smokeball;
 
     private IWeapons weaponInterface;
-    
-    [Space(10)]
-    [Header("Basic Attack Stats")]
-    [SerializeField] private float attackTimer;
+
+    [Space(10)] [Header("Basic Attack Stats")] [SerializeField]
+    private float attackTimer;
+
     [SerializeField] private bool canFire;
     public float fireSpeed = 1;
     public int basicAttackType = 1;
 
-    [Space(10)] [Header("Spinning Sword Stats")] 
-    [SerializeField] private float spinSpeed;
-    
-    [Space(10)] [Header("Smokeball Stats")]
-    [SerializeField] private Transform spawnPoint;
+    [Space(10)] [Header("Spinning Sword Stats")] [SerializeField]
+    private float spinSpeed;
+
+    [Space(10)] [Header("Smokeball Stats")] [SerializeField]
+    private Transform spawnPoint;
+
     [SerializeField] private Transform aimPoint;
+    [SerializeField] private float bombFireRate;
+    [SerializeField] private bool boughtBombs;
+    private bool canThrow;
 
     private float a;
     private float b;
@@ -52,7 +55,12 @@ public class AttackManager : MonoBehaviour
         {
             StartCoroutine(BasicAttackTimer(attackTimer));
             FindClosestEnemy();
-            //Shoot(basicAttackType);
+            Shoot(basicAttackType);
+        }
+
+        if (canThrow && boughtBombs)
+        {
+            StartCoroutine(BombTimer(bombFireRate));
             ThrowBomb();
         }
     }
@@ -62,6 +70,13 @@ public class AttackManager : MonoBehaviour
         canFire = false;
         yield return new WaitForSeconds(timer);
         canFire = true;
+    }
+
+    private IEnumerator BombTimer(float timer)
+    {
+        canThrow = false;
+        yield return new WaitForSeconds(timer);
+        canThrow = true;
     }
 
     public void IncreaseSpinSpeed(float amount)
@@ -138,5 +153,11 @@ public class AttackManager : MonoBehaviour
         spinningSword.SetActive(true);
         spinningSword.GetComponent<IWeapons>().FindTarget(swordInstance);
         IncreaseSpinSpeed(10);
+    }
+
+    public void BuyBombs()
+    {
+        boughtBombs = true;
+        StartCoroutine(BombTimer(bombFireRate));
     }
 }

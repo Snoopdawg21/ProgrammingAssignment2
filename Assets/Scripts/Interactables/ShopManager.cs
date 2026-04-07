@@ -124,4 +124,20 @@ public class ShopManager : MonoBehaviour
             Debug.Log("You can't afford that.");
         }
     }
+
+    public void BuySmokeBombs()
+    {
+        money = gm.score;
+
+        if (money >= 1)
+        {
+            am.BuyBombs();
+            gm.score -= 1;
+            gm.UpdateScore();
+        }
+        else
+        {
+            Debug.Log("You can't afford that.");
+        }
+    }
 }

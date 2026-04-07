@@ -105,8 +105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Smokeball
   rb: {fileID: 8924132099768987044}
-  throwHeight: {x: 0, y: 550, z: 0}
-  throwForce: 100
+  throwHeight: {x: 0, y: 5, z: 0}
+  throwForce: 2
   smokeCloud: {fileID: 3947867512835456212, guid: 9de1b00a0b367de469ae19ada30fcc35, type: 3}
 --- !u!1001 &3941667595161997236
 PrefabInstance:

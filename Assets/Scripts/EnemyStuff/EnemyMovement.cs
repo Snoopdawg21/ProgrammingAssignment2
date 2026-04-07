@@ -105,7 +105,9 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator PauseTime(float timer)
     {
-        Debug.Log("Paused");
+        agent.SetDestination(transform.position);
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isIdle", true);
         yield return new WaitForSeconds(timer);
         checkCollisions = true;
     }

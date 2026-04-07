@@ -22,7 +22,7 @@ public class Smokeball : MonoBehaviour, IWeapons
     
     public void Fire()
     {
-        rb.AddForce((transform.forward * throwForce) + throwHeight);
+        rb.AddForce((transform.forward * throwForce) + throwHeight, ForceMode.Impulse);
     }
 
     public void FindTarget(Transform target)
