@@ -31,12 +31,13 @@ public class AttackManager : MonoBehaviour
     [Space(10)] [Header("Spinning Sword Stats")] [SerializeField]
     private float spinSpeed;
 
-    [Space(10)] [Header("Smokeball Stats")] [SerializeField]
-    private Transform spawnPoint;
-
+    [Space(10)] [Header("Smokeball Stats")] 
+    [SerializeField] private Transform spawnPoint;
     [SerializeField] private Transform aimPoint;
     [SerializeField] private float bombFireRate;
     [SerializeField] private bool boughtBombs;
+    public Vector3 throwHeight;
+    public float throwForce;
     private bool canThrow;
 
     private float a;

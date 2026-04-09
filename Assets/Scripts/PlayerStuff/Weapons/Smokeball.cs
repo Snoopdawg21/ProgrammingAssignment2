@@ -4,13 +4,14 @@ using UnityEngine;
 public class Smokeball : MonoBehaviour, IWeapons
 {
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private Vector3 throwHeight;
-    [SerializeField] private float throwForce;
+    [SerializeField] private AttackManager am;
     [SerializeField] private GameObject smokeCloud;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (am == null)
+            am = GameObject.FindGameObjectWithTag("Player").GetComponent<AttackManager>();
+        
         StartCoroutine(Lifetime(5));
     }
 
@@ -19,10 +20,10 @@ public class Smokeball : MonoBehaviour, IWeapons
         yield return new WaitForSeconds(timer);
         Destroy(gameObject);
     }
-    
+
     public void Fire()
     {
-        rb.AddForce((transform.forward * throwForce) + throwHeight, ForceMode.Impulse);
+        rb.AddForce((transform.forward * am.throwForce) + am.throwHeight, ForceMode.Impulse);
     }
 
     public void FindTarget(Transform target)
@@ -32,7 +33,7 @@ public class Smokeball : MonoBehaviour, IWeapons
         
         transform.LookAt(target);
     }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == 6)

@@ -17,11 +17,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        score = 0;
-        
         healthText.text = $"Health: 10";
     }
-
+    
     void Update()
     {
         if (wonGame)

@@ -8,13 +8,17 @@ public class ShopManager : MonoBehaviour
 
     private bool boughtFireball;
     private bool boughtSpinSword;
+    private bool boughtSmokeBomb;
 
     private int money;
     
     [SerializeField] private TMP_Text fireballCost;
     [SerializeField] private TMP_Text spinSwordCost;
+    [SerializeField] private TMP_Text smokeBallCost;
     [SerializeField] private GameObject spinSwordUpgradeButton;
     [SerializeField] private GameObject spinSwordLengthButton;
+    [SerializeField] private GameObject smokeBombForceButton;
+    [SerializeField] private GameObject smokeBombHeightButton;
 
     void Start()
     {
@@ -129,15 +133,39 @@ public class ShopManager : MonoBehaviour
     {
         money = gm.score;
 
-        if (money >= 1)
+        if (!boughtSmokeBomb)
         {
-            am.BuyBombs();
-            gm.score -= 1;
-            gm.UpdateScore();
+            if (money >= 1)
+            {
+                am.BuyBombs();
+                gm.score -= 1;
+                boughtSmokeBomb = true;
+                smokeBallCost.text = "Unavailable";
+                smokeBallCost.color = Color.gray2;
+                gm.UpdateScore();
+                smokeBombForceButton.SetActive(true);
+                smokeBombHeightButton.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("You can't afford that.");
+            }
         }
         else
         {
-            Debug.Log("You can't afford that.");
+            Debug.Log("Bro you own it alr");
+        }
+    }
+
+    public void BuyThrowForce()
+    {
+        money = gm.score;
+
+        if (money >= 2)
+        {
+            am.throwForce++;
+            gm.score -= 2;
+            gm.UpdateScore();
         }
     }
 }
