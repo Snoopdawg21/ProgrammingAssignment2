@@ -31,9 +31,11 @@ public class Fireball : MonoBehaviour, IWeapons
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy") 
+        {
             other.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
-
+            Debug.Log("Hit!");
+        }
         if (other.gameObject.tag != "Player")
             Destroy(gameObject);
     }
